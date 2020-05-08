@@ -1,9 +1,9 @@
-# TP-1
+# TP-3
 
 ## Tareas
 
 - [ ] Aceptar el assignment y clonar el repositorio con el ejercicio
-- [ ] Ir a la carpeta donde descargaste la kata. Ejemplo: `cd /home/juan/haskell/2020-funcional-tp-2`. Ejecutar `stack build --test`.
+- [ ] Ir a la carpeta donde descargaste la kata. Ejemplo: `cd /home/juan/haskell/2020-funcional-tp-3`. Ejecutar `stack build --test`.
 - [ ] Reemplazar la lista de integrantes con los nombres de los integrantes del equipo en el archivo README.md
 - [ ] Resolver el ejercicio siguiendo [un esquema de trabajo](https://github.com/pdep-utn/enunciados-miercoles-noche/blob/master/pages/haskell/trabajo.md), eso incluye
 - [ ] Ejecutar los tests con `stack test` y que den verde
@@ -18,7 +18,7 @@
 
 ## Objetivos
 
-Los objetivos de este tp son practicar los conceptos vistos en la clase: tuplas, datas y pattern matching sobre los mismos.
+Los objetivos de este tp son practicar los conceptos vistos en la clase: recursividad y manejo de listas.
 
 ## Pre-requisitos
 
@@ -58,103 +58,47 @@ Para conocer un poco más del testeo unitario automatizado recomendamos leer [es
 
 ## El enunciado
 
-En este TP van a tener que tipar todas las funciones ustedes.
+En este TP van a tener que definir **usando recursividad** (no vale usando otras funciones como que hagan la recursividad por ustedes) las siguientes funciones y tiparlas:
 
-### 1. Tuplas
-
-- **first**, **second** y **third**: fst y snd no funcionan con tuplas de 3 parámetros porque una tupla de 3 parámetros y una de dos van a ser de diferente tipo (pueden probarlo en `stack ghci`). Definan las funciones **first**, **second** y **third** que dada una tupla de tres parámetros dan respectivamente el primer, segundo y tercer valor. Por ej.
-```
-> first (1, "dos", 3)
-1
-> second (1, "dos", 3)
-"dos"
-> third (1, "dos", 3)
-3
-```
-- **swap**: recibe una tupla de dos elementos cualquiera y devuelve otra tupla con los elementos cambiados de orden. Por ej.
-```
-> swap ("hola", 5)
-(5, "hola")
-```
-- **divisionConResto**: las tuplas también son una buena manera de representar una función donde el resultado representa "dos cosas" a la vez. Entonces, definan una función que dado un dividendo y un divisor, te da la división entera entre ellos Y también el resto de esa división entera. Pueden usar `div` y `rem` para implementarla. Ej:
-```
-> divisionConResto 5 3
-(1, 2)
+- **obtenerElemento**: recibe un numero y una lista, y devuelve el elemento con ese indice en la lista. Ej:
+```haskell
+> obtenerElemento 0 [1, 2, 3]
+1.0
+> obtenerElemento 2 [1, 2, 3, 4, 5]
+3.0
+> obtenerElemento 1 ["hola", "chau"]
+"chau"
 ```
 
-### 2. Títulos
-
-![](https://thumbs.gfycat.com/IdioticWickedGalago-size_restricted.gif)
-
-Este punto va a estar un poco menos guiado, acá ustedes van a tener que definir como se crean los valores a usar.
-
-#### Tests
-
-Como van a estar definiendo ustedes como crear los datos, también van a tener que definir ustedes las implementaciones de los tests a realizar. ¿Cómo se hace esto?
-En el archivo test/Spec.hs, cada `it "..." $ do` es un test, en la línea de abajo de eso tienen que escribir el cuerpo del mismo. Los nombres de los tests para esta parte y la siguiente van a estar hecha y, así que solo tienen que completar los `it` que están vacíos con un ejemplo de lo que diga el título. El formato de todos los tests que van a escribir va a ser:
-
-```
-aplicacion de funcion `shouldBe` resultadoEsperado
+- **positivos**: dada una lista de numeros, retorna una lista con solo aquellos que son positivos. El 0 no es positivo. Ej:
+```haskell
+> positivos [-1, 0, 1, 3]
+[1.0, 3.0]
 ```
 
-Ejemplo de un test de puntos anteriores.:
-
+- **estaOrdenada**: dada una lista, devuelve si está ordenada o no. Una lista esta ordenada cuando cada elemento es mayor o igual al anterior. Ej:
+```haskell
+> estaOrdenada []
+True
+> estaOrdenada [1, 2, 3]
+True
+> estaOrdenada [2, 1, 5]
+False
 ```
- it "divisionConResto de un dividendo no divisible por su divisor, me da el resultado de la division y el resto" $ do
-    divisionConResto 4 3 `shouldBe` (1, 1)
+
+- **enMayusculas**: dado un string, que es una lista de caracteres, devuelve el string pero todo en mayúsculas. Van a necesitar usar `toUpper`, que está importada en Library.hs y que sirve para obtener un caracter en mayúsculas. Ej:
+```haskell
+> enMayusculas "mendozaaaa"
+"MENDOZAAAA"
 ```
-
-(divisionConResto 4 3) es el ejemplo a probar, y (1, 1) es el resultado esperado para ese ejemplo.
-
-Nota: para los primeros tests que tienen que escribir ustedes, hay ejemplos que pueden trasladar a su código como comentarios, para los siguientes tienen que pensar ustedes ejemplos que tengan sentido.
-
-#### Implementación
-
-Ahora sí, queremos representar personas que están estudiando diferentes carreras, y nos interesa saber su nombre, apellido, edad y título. Los títulos que queremos registrar en el sistema son Ingenieria, Licenciatura y Doctorado. Tambíen queremos contemplar el caso en el que aun no se tiene un título.
-
-Lo que vamos a querer poder hacer con estudiantes es pedir:
-
-- **edad**: nos da la edad de cualquier estudiante que pasemos.
-- **nombreCompleto**: si pasamos a alguien que no tiene título es su nombre + su apellido (separados por espacio), si pasamos a alguien con algún título, se le agrega la abreviación del título adelante. Por ej, si tenemos a Ayelen García que es ingeniera, y le pedimos su nombre completo, nos debería dar "Ing. Ayelen García". Las abreviaciones para cada título son:
-  - Ingenieria -> Ing.
-  - Licenciatura -> Lic.
-  - Doctorado -> Doc.
-- **recibirse**: recibe como parámetro un título y a una persona, y retorna a la persona luego de recibirse, que es la persona con el título que se pasó por parámetro e incrementando su edad en los años que tarda el título en obtenerse.
-Para los títulos que tenemos, los tiempos son:
-  - Ingenieria -> 6 años
-  - Licenciatura -> 4 años
-  - Doctorado -> 2 años
-  
-Nota: Si pasamos como parámetro a alguien que ya tiene un título, solo se reemplaza por el título más nuevo, así que no es necesario chequear que no tenga título para empezar.
-
-### 3. Pregunta:
-
-Si yo tengo a un estudiante que tiene 25 años, se llama Juan Fernandes y tiene título de Ingeniería, y en `ghci` evaluo el código para obtener a juan recibido con un doctorado y evaluo `edad juan`, ¿cuantos años me va a dar? ¿Por qué?
-(contestar eso en un comentario en el archivo)
-
-### 4. Devs
-
-Para realizar este punto va a haber que modificar un poco lo realizado en el punto 2. Se agrega un nuevo tipo de título, `Dev` (Developer).
-
-El tema es que cuando se habla de este título siempre se lo acompaña de la experiencia que se tiene trabajando en el área, así que el título debería ir acompañado de años de experiencia. No es lo mismo el título de Dev con 0 años de experiencia que el título de Dev con 5 años de experiencia.
-
-Recibirse de Dev con 0 años de experiencia lleva 2 años de estudio. Pero recibirse de Dev con más años de experiencia, lleva 2 años de estudio + esa cantidad de años de experiencia (lleva más recibirse cuando estás trabajando `:(`).
-
-Además, la abreviación que se agrega al nombre depende de la cantidad de años de experiencia que se lleva como Dev:
-Para Devs con 0 o 1 años de experiencia, la abreviación que se usa es "Dev Jr.", para Devs con más de 1 pero menos de 5 años de experiencia, la abreviación es "Dev Ssr.".
-Para Devs con más de 5 años de experiencia se usa "Dev Sr.".
-
-Finalmente, se puede ganar experiencia luego de haberse recibido de Dev, así que queremos plasmar esto con la siguiente función:
-
-- **practicar**: que recibe una persona y una cantidad de años de práctica y nos devuelve a la persona envejecida en esa cantidad de años y aparte:
-  - si era Dev, aumenta sus años de experiencia en esos años de práctica.
-  - si su título era cualquier otro o no tenía, no cambia nada más.
 
 ## Fecha de entrega
 
-Viernes 8 de Mayo.
+Viernes 15 de Mayo.
 
 ## Que hacer cuando terminan el TP
 
 Cuando terminen, creen un issue etiquetando a sus tutores así les llega una notificación y se corrigen y les dejan feedback ahí.
 ![](https://i.imgur.com/ypeXpBw.gif)
+
+A medida que vayamos viendo que crearon el issue, vamos a ir marcando como Entregado su TP en la planilla para que sepan que lo recibimos.
