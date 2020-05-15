@@ -2,6 +2,8 @@
 
 Este repo es para probar las diferencias entre los diferentes tipos de folds.
 
+Si no sabés que es fold, podes verlo [en este vídeo](https://www.youtube.com/watch?v=veiQkxz59NE)
+
 # ¿Como se usa?
 
 Luego de buildear (`stack build`), corré `stack ghci`, y en ghci podés probar los valores que ya están definidos en `Library.hs` como:
