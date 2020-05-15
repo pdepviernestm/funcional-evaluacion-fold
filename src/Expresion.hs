@@ -1,5 +1,5 @@
 module Expresion (module Prelude, module Expresion) where
-import PdePreludat (Number, Show(..), String, Eq, (++), (==), )
+import PdePreludat (Number, Show(..), String, Eq, (++), (==), (||))
 import Prelude (Num(..))
 
 data Expresion =  Var Variable
@@ -50,13 +50,14 @@ instance Num Expresion where
     _ -> 1
   fromInteger numero = Numero (fromInteger numero)
   negate expresion = case expresion of
+    Numero 0 -> Menos (Numero 0)
     Numero numero -> Numero (negate numero)
     Menos expresion -> expresion
     expresion -> Menos expresion
 
 instance Show Expresion where
   show expresion = case expresion of
-    a :+ b | signum b == 1 -> showSubexpresion a ++ " + " ++ showSubexpresion b
+    a :+ b | signum b == 0 || signum b == 1 -> showSubexpresion a ++ " + " ++ showSubexpresion b
     a :+ b -> showSubexpresion a ++ " - " ++ showSubexpresion (negate b)
     a :* b -> showSubexpresion a ++ " * " ++ showSubexpresion b
     Numero n -> show n
