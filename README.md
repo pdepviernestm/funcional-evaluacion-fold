@@ -21,3 +21,5 @@ o
 ```
 
 Si les cambiás el tipo en `Library.hs` de Expresion a Number, el resultado de esas sumatorias va a ser el número final, pero si lo dejás como Expresion te va a mostrar como el fold resolvería esa operación.
+
+Para saber como seguir, recomiendo que leas el archivo `Library.hs` que tiene algunas instrucciones de cosas a probar ;)
